@@ -5,3 +5,7 @@ timm
 h5py
 submitit
 scikit-image
+phenobench
+torchmetrics
+opencv-python-headless==4.8.0.74
+pillow==9.5.0
