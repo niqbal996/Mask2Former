@@ -2,7 +2,7 @@ MODEL:
   BACKBONE:
     FREEZE_AT: 0
     NAME: "build_resnet_backbone"
-  WEIGHTS: "/home/niqbal/git/aa_transformers/Mask2Former/weights/model_final_94dc52.pkl"
+  WEIGHTS: "/netscratch/naeem/panoptic_phenobench/model_final_94dc52.pkl"
   PIXEL_MEAN: [124.578, 97.773, 65.357]
   PIXEL_STD: [58.341, 48.268, 37.847]
   RESNETS:
@@ -16,9 +16,9 @@ MODEL:
 DATASETS:
   TRAIN: ("phenobench_train",)
   TEST: ("phenobench_val",)
-OUTPUT_DIR: "/mnt/e/trainers/phenobench/mask2former_plants_phenobench"
+OUTPUT_DIR: "/netscratch/naeem/panoptic_phenobench/mask2former_plants_phenobench_baseline"
 SOLVER:
-  IMS_PER_BATCH: 1
+  IMS_PER_BATCH: 8
   BASE_LR: 0.0001
   MAX_ITER: 50000
   WARMUP_FACTOR: 1.0
