@@ -19,7 +19,8 @@ import os
 
 from collections import OrderedDict
 from typing import Any, Dict, List, Set
-
+warnings.filterwarnings('ignore', category=FutureWarning)
+warnings.filterwarnings('ignore', category=UserWarning)
 import torch
 
 import detectron2.utils.comm as comm
@@ -39,6 +40,7 @@ from detectron2.evaluation import (
     COCOPanopticEvaluator,
     DatasetEvaluators,
     LVISEvaluator,
+    PhenoBenchEvaluator,
     SemSegEvaluator,
     verify_results,
 )
@@ -56,6 +58,7 @@ from mask2former import (
     MaskFormerSemanticDatasetMapper,
     SemanticSegmentorWithTTA,
     add_maskformer2_config,
+
 )
 
 
@@ -95,6 +98,7 @@ class Trainer(DefaultTrainer):
             "ade20k_panoptic_seg",
             "cityscapes_panoptic_seg",
             "mapillary_vistas_panoptic_seg",
+            "phenobench",
         ]:
             if cfg.MODEL.MASK_FORMER.TEST.PANOPTIC_ON:
                 evaluator_list.append(COCOPanopticEvaluator(dataset_name, output_folder))
@@ -103,6 +107,8 @@ class Trainer(DefaultTrainer):
             evaluator_list.append(COCOEvaluator(dataset_name, output_dir=output_folder))
         if evaluator_type == "coco_panoptic_seg" and cfg.MODEL.MASK_FORMER.TEST.SEMANTIC_ON:
             evaluator_list.append(SemSegEvaluator(dataset_name, distributed=True, output_dir=output_folder))
+        if evaluator_type == "phenobench":
+            evaluator_list.append(PhenoBenchEvaluator(dataset_name, output_dir=output_folder))
         # Mapillary Vistas
         if evaluator_type == "mapillary_vistas_panoptic_seg" and cfg.MODEL.MASK_FORMER.TEST.INSTANCE_ON:
             evaluator_list.append(InstanceSegEvaluator(dataset_name, output_dir=output_folder))
@@ -299,27 +305,40 @@ def setup(args):
 
 def register_pheno():
     from detectron2.data.datasets import register_pheno_panoptic
-    
 
     register_pheno_panoptic(name="phenobench_train", 
                         metadata={},
-                        image_root="/mnt/e/datasets/phenobench/train/images/",
-                        panoptic_root="/mnt/e/datasets/phenobench/plants_panoptic_train",
-                        panoptic_json="/mnt/e/datasets/phenobench/plants_panoptic_train.json",
+                        image_root="/netscratch/naeem/phenobench/train/images/",
+                        panoptic_root="/netscratch/naeem/phenobench/plants_panoptic_train",
+                        panoptic_json="/netscratch/naeem/phenobench/plants_panoptic_train.json",
                         #    instances_json="/mnt/e/datasets/phenobench/plants_panoptic_train.json",
                         )
     register_pheno_panoptic(name="phenobench_val", 
                         metadata={},
-                        image_root="/mnt/e/datasets/phenobench/val/images/",
-                        panoptic_root="/mnt/e/datasets/phenobench/plants_panoptic_val",
-                        panoptic_json="/mnt/e/datasets/phenobench/plants_panoptic_val.json",
+                        image_root="/netscratch/naeem/phenobench/val/images/",
+                        panoptic_root="/netscratch/naeem/phenobench/plants_panoptic_val",
+                        panoptic_json="/netscratch/naeem/phenobench/plants_panoptic_val.json",
                         #    instances_json="/mnt/e/datasets/phenobench/plants_panoptic_val.json",
                         )
     from detectron2.data import MetadataCatalog
-    MetadataCatalog.get("phenobench_train").ignore_label = 255
-    MetadataCatalog.get("phenobench_val").ignore_label = 255
-    # MetadataCatalog.get("phenobench_train").evaluator_type = "phenobench"
-    # MetadataCatalog.get("phenobench_val").evaluator_type = "phenobench"
+    # MetadataCatalog.get("phenobench_train").ignore_label = 255
+    # MetadataCatalog.get("phenobench_val").ignore_label = 255
+    MetadataCatalog.get('phenobench_train').set(
+        thing_classes=["crop", "weed"],
+        thing_dataset_id_to_contiguous_id={0: 1, 1: 2},
+        stuff_classes=["soil"],
+        stuff_dataset_id_to_contiguous_id={0: 0},
+        thing_colors=[(111, 74, 0), (230, 150, 140)],  # Example colors for visualization
+        stuff_colors=[(0, 0, 0)],  # color for background
+    )
+    MetadataCatalog.get('phenobench_val').set(
+        thing_classes=["crop", "weed"],
+        thing_dataset_id_to_contiguous_id={0: 1, 1: 2},
+        stuff_classes=["soil"],
+        stuff_dataset_id_to_contiguous_id={0: 0},
+        thing_colors=[(111, 74, 0), (230, 150, 140)],  # Example colors for visualization
+        stuff_colors=[(0, 0, 0)],  # Example color for background,
+    )
 
 def main(args):
     cfg = setup(args)
