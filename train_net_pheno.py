@@ -61,6 +61,7 @@ from mask2former import (
 
 )
 
+from register_phenobench import register_phenobench
 
 class Trainer(DefaultTrainer):
     """
@@ -303,46 +304,10 @@ def setup(args):
     setup_logger(output=cfg.OUTPUT_DIR, distributed_rank=comm.get_rank(), name="mask2former")
     return cfg
 
-def register_pheno():
-    from detectron2.data.datasets import register_pheno_panoptic
-
-    register_pheno_panoptic(name="phenobench_train", 
-                        metadata={},
-                        image_root="/netscratch/naeem/phenobench/train/images/",
-                        panoptic_root="/netscratch/naeem/phenobench/plants_panoptic_train",
-                        panoptic_json="/netscratch/naeem/phenobench/plants_panoptic_train.json",
-                        #    instances_json="/mnt/e/datasets/phenobench/plants_panoptic_train.json",
-                        )
-    register_pheno_panoptic(name="phenobench_val", 
-                        metadata={},
-                        image_root="/netscratch/naeem/phenobench/val/images/",
-                        panoptic_root="/netscratch/naeem/phenobench/plants_panoptic_val",
-                        panoptic_json="/netscratch/naeem/phenobench/plants_panoptic_val.json",
-                        #    instances_json="/mnt/e/datasets/phenobench/plants_panoptic_val.json",
-                        )
-    from detectron2.data import MetadataCatalog
-    # MetadataCatalog.get("phenobench_train").ignore_label = 255
-    # MetadataCatalog.get("phenobench_val").ignore_label = 255
-    MetadataCatalog.get('phenobench_train').set(
-        thing_classes=["crop", "weed"],
-        thing_dataset_id_to_contiguous_id={0: 1, 1: 2},
-        stuff_classes=["soil"],
-        stuff_dataset_id_to_contiguous_id={0: 0},
-        thing_colors=[(111, 74, 0), (230, 150, 140)],  # Example colors for visualization
-        stuff_colors=[(0, 0, 0)],  # color for background
-    )
-    MetadataCatalog.get('phenobench_val').set(
-        thing_classes=["crop", "weed"],
-        thing_dataset_id_to_contiguous_id={0: 1, 1: 2},
-        stuff_classes=["soil"],
-        stuff_dataset_id_to_contiguous_id={0: 0},
-        thing_colors=[(111, 74, 0), (230, 150, 140)],  # Example colors for visualization
-        stuff_colors=[(0, 0, 0)],  # Example color for background,
-    )
 
 def main(args):
     cfg = setup(args)
-    register_pheno()
+    register_phenobench()
     if args.eval_only:
         model = Trainer.build_model(cfg)
         DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(
