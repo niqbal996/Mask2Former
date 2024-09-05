@@ -9,6 +9,14 @@ from detectron2.utils.file_io import PathManager
 logger = logging.getLogger(__name__)
 __all__ = ["register_pheno_panoptic_separated"]
 
+COCO_CATEGORIES = {
+        0: 0,
+        1: 1,
+        2: 2,
+        3: 3,
+        4: 4,
+    }
+
 def load_pheno_panoptic_json(json_file, image_dir, gt_dir, meta):
     """
     Args:
@@ -160,6 +168,34 @@ def load_sem_seg(gt_root, image_root, gt_ext="png", image_ext="jpg"):
 
     return dataset_dicts
 
+def get_metadata():
+    meta = {}
+
+    # Define classes and colors
+    thing_classes = ["crop", "weed"]
+    thing_colors = [(111, 74, 0), (230, 150, 140)]
+    stuff_classes = ["soil"]
+    stuff_colors = [(0, 0, 0)]
+
+    meta["thing_classes"] = thing_classes
+    meta["thing_colors"] = thing_colors
+    meta["stuff_classes"] = stuff_classes
+    meta["stuff_colors"] = stuff_colors
+
+    # Map dataset IDs to contiguous IDs
+    meta["thing_dataset_id_to_contiguous_id"] = {1: 1, 2: 2}  # 1 -> crop, 2 -> weed
+    meta["stuff_dataset_id_to_contiguous_id"] = {255: 3}  # 255 -> soil
+
+    # Set ignore label
+    meta["ignore_label"] = 255
+
+    # Additional metadata for visualization and evaluation
+    meta["stuff_classes"] = stuff_classes + thing_classes
+    meta["stuff_colors"] = stuff_colors + thing_colors
+    meta["stuff_dataset_id_to_contiguous_id"].update(meta["thing_dataset_id_to_contiguous_id"])
+
+    return meta
+
 def register_pheno_panoptic_separated(
     name, metadata, image_root, panoptic_root, panoptic_json, sem_seg_root, instances_json=None
 ):
@@ -194,7 +230,6 @@ def register_pheno_panoptic_separated(
         sem_seg_root=sem_seg_root,
         json_file=instances_json,  # TODO rename
         evaluator_type="coco_panoptic_seg",
-        ignore_label=255,
         label_divisor=1000,
         **metadata,
     )

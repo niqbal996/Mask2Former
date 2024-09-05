@@ -4,7 +4,7 @@ MODEL:
   SEM_SEG_HEAD:
     NAME: "MaskFormerHead"
     IGNORE_VALUE: 255
-    NUM_CLASSES: 2
+    NUM_CLASSES: 3
     LOSS_WEIGHT: 1.0
     CONVS_DIM: 256
     MASK_DIM: 256
@@ -39,6 +39,6 @@ MODEL:
     TEST:
       SEMANTIC_ON: True
       INSTANCE_ON: False
-      PANOPTIC_ON: True
+      PANOPTIC_ON: False
       OVERLAP_THRESHOLD: 0.8
       OBJECT_MASK_THRESHOLD: 0.8
