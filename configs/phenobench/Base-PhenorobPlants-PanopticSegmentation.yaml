@@ -2,7 +2,8 @@ MODEL:
   BACKBONE:
     FREEZE_AT: 0
     NAME: "build_resnet_backbone"
-  WEIGHTS: "/netscratch/naeem/panoptic_phenobench/model_final_94dc52.pkl"
+  # WEIGHTS: "/home/niqbal/trainers/phenobench/mask2former_semantic_segmentation/model_0003999.pth"
+  WEIGHTS: "/home/niqbal/datasets/phenobench/model_final_94dc52.pkl"
   PIXEL_MEAN: [124.578, 97.773, 65.357]
   PIXEL_STD: [58.341, 48.268, 37.847]
   RESNETS:
@@ -14,14 +15,16 @@ MODEL:
     NORM: "BN"  # use syncbn for cityscapes dataset
     RES5_MULTI_GRID: [1, 1, 1]  # not used
 DATASETS:
-  TRAIN: ("phenobench_train",)
+  TRAIN: ("syn_train",)
+  # TRAIN: ("phenobench_train",)
   TEST: ("phenobench_val",)
-OUTPUT_DIR: "/netscratch/naeem/panoptic_phenobench/mask2former_plants_phenobench_baseline"
+OUTPUT_DIR: "/home/niqbal/trainers/phenobench/mask2former_semantic_segmentation_synthetic_baseline"
 SOLVER:
-  IMS_PER_BATCH: 8
+  IMS_PER_BATCH: 1
   BASE_LR: 0.0001
-  MAX_ITER: 50000
+  MAX_ITER: 10000
   WARMUP_FACTOR: 1.0
+  CHECKPOINT_PERIOD: 1000
   WARMUP_ITERS: 0
   WEIGHT_DECAY: 0.05
   OPTIMIZER: "ADAMW"
@@ -50,7 +53,7 @@ INPUT:
   FORMAT: "RGB"
   DATASET_MAPPER_NAME: "pheno_mask_former_panoptic"
 TEST:
-  EVAL_PERIOD: 500
+  EVAL_PERIOD: 50
   AUG:
     ENABLED: False
     MIN_SIZES: [512, 768, 1024, 1280, 1536, 1792]

@@ -40,9 +40,9 @@ from detectron2.evaluation import (
     COCOPanopticEvaluator,
     DatasetEvaluators,
     LVISEvaluator,
-    PhenoBenchEvaluator,
+    # PhenoBenchEvaluator,
     SemSegEvaluator,
-    CustomSemSegEvaluator,
+    # CustomSemSegEvaluator,
     verify_results,
 )
 from detectron2.projects.deeplab import add_deeplab_config, build_lr_scheduler
@@ -62,7 +62,7 @@ from mask2former import (
 
 )
 
-from register_phenobench import register_phenobench
+from register_phenobench import register_phenobench, register_synthetic_pheno
 
 class Trainer(DefaultTrainer):
     """
@@ -290,7 +290,11 @@ class Trainer(DefaultTrainer):
         res = OrderedDict({k + "_TTA": v for k, v in res.items()})
         return res
 
-
+    # def add_hooks(self):
+    #     self.register_hooks(
+    #         'hooks',
+    #     )
+        
 def setup(args):
     """
     Create configs and perform basic setups.
@@ -311,6 +315,7 @@ def setup(args):
 def main(args):
     cfg = setup(args)
     register_phenobench()
+    register_synthetic_pheno()
     if args.eval_only:
         model = Trainer.build_model(cfg)
         DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(

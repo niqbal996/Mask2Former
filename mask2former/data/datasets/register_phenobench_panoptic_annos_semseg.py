@@ -173,9 +173,9 @@ def get_metadata():
 
     # Define classes and colors
     thing_classes = ["crop", "weed"]
-    thing_colors = [(111, 74, 0), (230, 150, 140)]
+    thing_colors = [(0, 0, 200), (200, 0, 0)]
     stuff_classes = ["soil"]
-    stuff_colors = [(0, 0, 0)]
+    stuff_colors = [(10, 10, 10)]
 
     meta["thing_classes"] = thing_classes
     meta["thing_colors"] = thing_colors
@@ -184,16 +184,14 @@ def get_metadata():
 
     # Map dataset IDs to contiguous IDs
     meta["thing_dataset_id_to_contiguous_id"] = {1: 1, 2: 2}  # 1 -> crop, 2 -> weed
-    meta["stuff_dataset_id_to_contiguous_id"] = {255: 3}  # 255 -> soil
+    meta["stuff_dataset_id_to_contiguous_id"] = {3: 3}  # 255 -> soil
 
     # Set ignore label
     meta["ignore_label"] = 255
 
-    # Additional metadata for visualization and evaluation
     meta["stuff_classes"] = stuff_classes + thing_classes
     meta["stuff_colors"] = stuff_colors + thing_colors
     meta["stuff_dataset_id_to_contiguous_id"].update(meta["thing_dataset_id_to_contiguous_id"])
-
     return meta
 
 def register_pheno_panoptic_separated(

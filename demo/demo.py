@@ -22,6 +22,7 @@ from detectron2.config import get_cfg
 from detectron2.data.detection_utils import read_image
 from detectron2.projects.deeplab import add_deeplab_config
 from detectron2.utils.logger import setup_logger
+from register_phenobench import register_phenobench
 
 from mask2former import add_maskformer2_config
 from predictor import VisualizationDemo
@@ -34,6 +35,7 @@ WINDOW_NAME = "mask2former demo"
 def setup_cfg(args):
     # load config from file and command-line arguments
     cfg = get_cfg()
+    register_phenobench()
     add_deeplab_config(cfg)
     add_maskformer2_config(cfg)
     cfg.merge_from_file(args.config_file)
