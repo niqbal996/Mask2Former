@@ -2,7 +2,7 @@ import os
 from mask2former.data.datasets.register_phenobench_panoptic_annos_semseg import register_pheno_panoptic_separated, get_metadata
 def register_phenobench():
     
-    root_dir = "/home/niqbal/datasets/phenobench"
+    root_dir = "/netscratch/naeem/phenobench"
     register_pheno_panoptic_separated(name="phenobench_train", 
                         metadata=get_metadata(),
                         image_root=os.path.join(root_dir, "train/images/"),
