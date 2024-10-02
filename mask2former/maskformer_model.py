@@ -287,7 +287,7 @@ class MaskFormer(nn.Module):
         scores, labels = F.softmax(mask_cls, dim=-1).max(-1)
         mask_pred = mask_pred.sigmoid()
 
-        keep = labels.ne(self.sem_seg_head.num_classes+1) & (scores > self.object_mask_threshold)
+        keep = labels.ne(self.sem_seg_head.num_classes) & (scores > self.object_mask_threshold)
         cur_scores = scores[keep]
         cur_classes = labels[keep]
         cur_masks = mask_pred[keep]

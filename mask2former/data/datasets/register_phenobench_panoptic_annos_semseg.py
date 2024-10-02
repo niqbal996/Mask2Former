@@ -184,7 +184,7 @@ def get_metadata():
 
     # Map dataset IDs to contiguous IDs
     meta["thing_dataset_id_to_contiguous_id"] = {1: 1, 2: 2}  # 1 -> crop, 2 -> weed
-    meta["stuff_dataset_id_to_contiguous_id"] = {3: 3}  # 255 -> soil
+    meta["stuff_dataset_id_to_contiguous_id"] = {0: 0}  # 255 -> soil
 
     # Set ignore label
     meta["ignore_label"] = 255
