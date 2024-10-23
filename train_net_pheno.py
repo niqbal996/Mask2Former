@@ -59,7 +59,6 @@ from mask2former import (
     MaskFormerSemanticDatasetMapper,
     SemanticSegmentorWithTTA,
     add_maskformer2_config,
-
 )
 
 from register_phenobench import register_phenobench, register_synthetic_pheno
@@ -300,6 +299,7 @@ def setup(args):
     Create configs and perform basic setups.
     """
     cfg = get_cfg()
+    cfg.set_new_allowed(True)
     # for poly lr schedule
     add_deeplab_config(cfg)
     add_maskformer2_config(cfg)
