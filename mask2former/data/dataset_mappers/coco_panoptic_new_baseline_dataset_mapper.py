@@ -5,7 +5,7 @@ import logging
 
 import numpy as np
 import torch
-import albumentations as A
+# import albumentations as A
 
 from detectron2.config import configurable
 from detectron2.data import detection_utils as utils
