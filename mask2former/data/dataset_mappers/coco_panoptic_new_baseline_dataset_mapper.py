@@ -5,13 +5,11 @@ import logging
 
 import numpy as np
 import torch
-# import albumentations as A
 
 from detectron2.config import configurable
 from detectron2.data import detection_utils as utils
 from detectron2.data import transforms as T
 from detectron2.data.transforms import TransformGen
-from detectron2.data.transforms import AlbumentationsWrapper
 from detectron2.structures import BitMasks, Boxes, Instances
 
 __all__ = ["COCOPanopticNewBaselineDatasetMapper"]
@@ -38,17 +36,6 @@ def build_transform_gen(cfg, is_train):
                 vertical=cfg.INPUT.RANDOM_FLIP == "vertical",
             )
         )
-
-    # Use the config flag to conditionally add Albumentations augmentations
-    # if cfg.INPUT.ALBUMENTATIONS_AUGMENTATION:
-    augmentation.extend([
-        AlbumentationsWrapper(A.MotionBlur(blur_limit=13, p=0.8)),
-        AlbumentationsWrapper(A.Blur(blur_limit=13, p=0.8)),
-        AlbumentationsWrapper(A.MedianBlur(blur_limit=13, p=0.8)),
-        AlbumentationsWrapper(A.ToGray(p=0.01)),
-        AlbumentationsWrapper(A.CLAHE(p=0.5)),
-        AlbumentationsWrapper(A.RandomBrightnessContrast(p=0.01))
-    ])
 
     augmentation.extend([
         T.ResizeScale(
