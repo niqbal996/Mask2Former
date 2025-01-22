@@ -2,7 +2,7 @@ import os
 from mask2former.data.datasets.register_phenobench_panoptic_annos_semseg import register_pheno_panoptic_separated, get_metadata
 def register_phenobench():
     
-    root_dir = "/netscratch/naeem/phenobench"
+    root_dir = "/mnt/e/datasets/phenobench/"
     register_pheno_panoptic_separated(name="phenobench_train", 
                         metadata=get_metadata(),
                         image_root=os.path.join(root_dir, "train/images/"),
@@ -21,11 +21,19 @@ def register_phenobench():
                         )
     
 def register_synthetic_pheno():
-    root_dir = "/home/niqbal/datasets/sugarbeets_syn_v6"
+    root_dir = "/mnt/e/datasets/sugarbeet_syn_v6"
     register_pheno_panoptic_separated(name="syn_train", 
                         metadata=get_metadata(),
                         image_root=os.path.join(root_dir, "images"),
                         panoptic_root=os.path.join(root_dir, "plants_panoptic_train"),
-                        panoptic_json=os.path.join(root_dir, "instances_train.json"),
+                        panoptic_json=os.path.join(root_dir, "plants_panoptic_train.json"),
                         sem_seg_root=os.path.join(root_dir, "plants_panoptic_semseg_train")
+                        )
+    root_dir = "/mnt/e/datasets/sugarbeets_leaves"
+    register_pheno_panoptic_separated(name="syn_train_leaves", 
+                        metadata=get_metadata(),
+                        image_root=os.path.join(root_dir, "images"),
+                        panoptic_root=os.path.join(root_dir, "leafs_panoptic_train"),
+                        panoptic_json=os.path.join(root_dir, "leafs_panoptic_train.json"),
+                        sem_seg_root=os.path.join(root_dir, "leafs_panoptic_semseg_train")
                         )

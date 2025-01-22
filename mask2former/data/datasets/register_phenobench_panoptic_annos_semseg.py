@@ -173,9 +173,9 @@ def get_metadata():
 
     # Define classes and colors
     thing_classes = ["crop", "weed"]
-    thing_colors = [(0, 0, 200), (200, 0, 0)]
+    thing_colors = [(0, 200, 0), (200, 0, 0)]
     stuff_classes = ["soil"]
-    stuff_colors = [(10, 10, 10)]
+    stuff_colors = [(0, 0, 200)]
 
     meta["thing_classes"] = thing_classes
     meta["thing_colors"] = thing_colors
