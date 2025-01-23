@@ -168,6 +168,32 @@ def load_sem_seg(gt_root, image_root, gt_ext="png", image_ext="jpg"):
 
     return dataset_dicts
 
+def get_metadata_leaves():
+    meta = {}
+
+    # Define classes and colors
+    thing_classes = ["crop", "leaf", "weed"]
+    thing_colors = [(0, 200, 0), (200, 0, 0), (0, 0, 200)]
+    stuff_classes = ["soil"]
+    stuff_colors = [(0, 0, 200)]
+
+    meta["thing_classes"] = thing_classes
+    meta["thing_colors"] = thing_colors
+    meta["stuff_classes"] = stuff_classes
+    meta["stuff_colors"] = stuff_colors
+
+    # Map dataset IDs to contiguous IDs
+    meta["thing_dataset_id_to_contiguous_id"] = {1: 1, 2: 2, 3: 3}  # 1 -> crop, 2 -> leaf, 3 -> weed
+    meta["stuff_dataset_id_to_contiguous_id"] = {0: 0}  # 255 -> soil
+
+    # Set ignore label
+    meta["ignore_label"] = 255
+
+    meta["stuff_classes"] = stuff_classes + thing_classes
+    meta["stuff_colors"] = stuff_colors + thing_colors
+    meta["stuff_dataset_id_to_contiguous_id"].update(meta["thing_dataset_id_to_contiguous_id"])
+    return meta
+
 def get_metadata():
     meta = {}
 

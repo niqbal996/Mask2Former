@@ -2,8 +2,8 @@ MODEL:
   BACKBONE:
     FREEZE_AT: 0
     NAME: "build_resnet_backbone"
-  WEIGHTS: "/home/niqbal/git/aa_transformers/mask2former_forked/weights/model_final_94dc52.pkl"
-  # WEIGHTS: "/home/niqbal/datasets/phenobench/model_final_94dc52.pkl"
+  WEIGHTS: "/home/niqbal/trainers/phenobench/mask2former_panoptic_semantic_leaves_synthetic_baseline/model_final.pth"
+  # WEIGHTS: "/home/niqbal/datasets/models/model_final_94dc52.pkl"
   PIXEL_MEAN: [124.578, 97.773, 65.357]
   PIXEL_STD: [58.341, 48.268, 37.847]
   RESNETS:
@@ -18,7 +18,7 @@ DATASETS:
   # TRAIN: ("syn_train",)
   TRAIN: ("syn_train_leaves",)
   TEST: ("syn_train_leaves",)
-OUTPUT_DIR: "/mnt/e/trainers/mask2former_panoptic_semantic_leaves_phenobench_baseline"
+OUTPUT_DIR: "/home/niqbal/trainers/phenobench/mask2former_panoptic_semantic_leaves_synthetic_baseline"
 SOLVER:
   IMS_PER_BATCH: 2
   BASE_LR: 0.0001
@@ -53,7 +53,7 @@ INPUT:
   FORMAT: "RGB"
   DATASET_MAPPER_NAME: "pheno_mask_former_panoptic"
 TEST:
-  EVAL_PERIOD: 50
+  EVAL_PERIOD: 500
   AUG:
     ENABLED: False
     MIN_SIZES: [512, 768, 1024, 1280, 1536, 1792]
